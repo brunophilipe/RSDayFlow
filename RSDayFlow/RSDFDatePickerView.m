@@ -117,12 +117,7 @@ static NSString * const RSDFDatePickerViewDayCellIdentifier = @"RSDFDatePickerVi
     CGPoint beforeLayoutSubviewsContentOffset = self.collectionView.contentOffset;
     
     [super layoutSubviews];
-    
-    self.daysOfWeekView.frame = [self daysOfWeekViewFrame];
-    if (!self.daysOfWeekView.superview) {
-        [self addSubview:self.daysOfWeekView];
-    }
-    
+
     self.collectionView.frame = [self collectionViewFrame];
     if (!self.collectionView.superview) {
         [self addSubview:self.collectionView];
@@ -131,6 +126,11 @@ static NSString * const RSDFDatePickerViewDayCellIdentifier = @"RSDFDatePickerVi
         [self.collectionViewLayout prepareLayout];
         self.collectionView.contentOffset = beforeLayoutSubviewsContentOffset;
     }
+
+	self.daysOfWeekView.frame = [self daysOfWeekViewFrame];
+	if (!self.daysOfWeekView.superview) {
+		[self addSubview:self.daysOfWeekView];
+	}
 }
 
 #pragma mark - Properties
@@ -166,12 +166,7 @@ static NSString * const RSDFDatePickerViewDayCellIdentifier = @"RSDFDatePickerVi
 
 - (CGRect)collectionViewFrame
 {
-    CGFloat daysOfWeekViewHeight = CGRectGetHeight([self daysOfWeekViewFrame]);
-    
-    CGRect collectionViewFrame = self.bounds;
-    collectionViewFrame.origin.y += daysOfWeekViewHeight;
-    collectionViewFrame.size.height -= daysOfWeekViewHeight;
-    return collectionViewFrame;
+    return [self bounds];
 }
 
 - (RSDFDatePickerCollectionViewLayout *)collectionViewLayout
@@ -250,6 +245,7 @@ static NSString * const RSDFDatePickerViewDayCellIdentifier = @"RSDFDatePickerVi
 - (CGRect)daysOfWeekViewFrame
 {
     CGRect daysOfWeekViewFrame = self.bounds;
+	daysOfWeekViewFrame.origin.y = [self layoutMargins].top;
     daysOfWeekViewFrame.size.height = [self daysOfWeekViewHeight];
     
     return daysOfWeekViewFrame;
