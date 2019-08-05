@@ -342,17 +342,29 @@ CGFloat roundOnBase(CGFloat x, CGFloat base) {
 
 - (UIColor *)dayLabelTextColor
 {
-    return [UIColor blackColor];
+	if (@available(iOS 13.0, *)) {
+		return [UIColor labelColor];
+	} else {
+		return [UIColor blackColor];
+	}
 }
 
 - (UIColor *)dayOffLabelTextColor
 {
-    return [UIColor colorWithRed:184/255.0f green:184/255.0f blue:184/255.0f alpha:1.0f];
+	if (@available(iOS 13.0, *)) {
+		return [UIColor secondaryLabelColor];
+	} else {
+		return [UIColor colorWithRed:184/255.0f green:184/255.0f blue:184/255.0f alpha:1.0f];
+	}
 }
 
 - (UIColor *)outOfRangeDayLabelTextColor
 {
-    return [UIColor colorWithRed:184/255.0f green:184/255.0f blue:184/255.0f alpha:1.0f];
+	if (@available(iOS 13.0, *)) {
+		return [UIColor tertiaryLabelColor];
+	} else {
+		return [UIColor colorWithRed:184/255.0f green:184/255.0f blue:184/255.0f alpha:1.0f];
+	}
 }
 
 - (UIFont *)outOfRangeDayLabelFont
@@ -382,7 +394,7 @@ CGFloat roundOnBase(CGFloat x, CGFloat base) {
 
 - (UIColor *)todayLabelTextColor
 {
-    return [UIColor colorWithRed:0/255.0f green:121/255.0f blue:255/255.0f alpha:1.0f];
+    return [UIColor systemBlueColor];
 }
 
 - (UIFont *)selectedTodayLabelFont
@@ -397,7 +409,7 @@ CGFloat roundOnBase(CGFloat x, CGFloat base) {
 
 - (UIColor *)selectedTodayImageColor
 {
-    return [UIColor colorWithRed:0/255.0f green:121/255.0f blue:255/255.0f alpha:1.0f];
+    return [UIColor systemBlueColor];
 }
 
 - (UIImage *)customSelectedTodayImage
@@ -428,7 +440,7 @@ CGFloat roundOnBase(CGFloat x, CGFloat base) {
 
 - (UIColor *)selectedDayImageColor
 {
-    return [UIColor colorWithRed:255/255.0f green:59/255.0f blue:48/255.0f alpha:1.0f];
+    return [UIColor systemRedColor];
 }
 
 - (UIImage *)customSelectedDayImage
@@ -470,7 +482,11 @@ CGFloat roundOnBase(CGFloat x, CGFloat base) {
 
 - (UIColor *)dividerImageColor
 {
-    return [UIColor colorWithRed:200/255.0f green:200/255.0f blue:200/255.0f alpha:1.0f];
+	if (@available(iOS 13.0, *)) {
+		return [UIColor systemFillColor];
+	} else {
+		return [UIColor colorWithRed:200/255.0f green:200/255.0f blue:200/255.0f alpha:1.0f];
+	}
 }
 
 - (UIImage *)customDividerImage

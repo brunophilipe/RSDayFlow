@@ -56,7 +56,7 @@ typedef NS_ENUM (NSUInteger, RSDFDaysOfWeekDisplayStyle) {
 ///---------------------------------------
 
 /**
- The view’s background color. Default value is `[UIColor colorWithRed:248.0/255 green:248.0/255 blue:248.0/255 alpha:1.0]`.
+ The view’s background color. Default value is `+[UIColor systemGropedBackgroundColor]` on iOS >= 13, `+[UIColor colorWithRed:248.0/255 green:248.0/255 blue:248.0/255 alpha:1.0]` otherwise.
  
  @discussion Can be overridden in subclasses for customization.
  */
@@ -129,14 +129,14 @@ typedef NS_ENUM (NSUInteger, RSDFDaysOfWeekDisplayStyle) {
 - (UIFont *)dayOffOfWeekLabelFont;
 
 /**
- The text color for the label of the weekday. Default value is [UIColor blackColor].
+ The text color for the label of the weekday. Default value is `+[UIColor labelColor]` on iOS >= 13, `+[UIColor blackColor]` otherwise.
  
  @discussion Can be overridden in subclasses for customization.
  */
 - (UIColor *)dayOfWeekLabelTextColor;
 
 /**
- The text color for the label of the day off of the week. Default value is [UIColor colorWithRed:150.0/255 green:150.0/255 blue:150.0/255 alpha:1.0].
+ The text color for the label of the day off of the week. Default value is `+[UIColor secondaryLabelColor]` on iOS >= 13, `+[UIColor colorWithRed:150.0/255 green:150.0/255 blue:150.0/255 alpha:1.0]` otherwise.
  
  @discussion Can be overridden in subclasses for customization.
  */

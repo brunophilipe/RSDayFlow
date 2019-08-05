@@ -118,21 +118,21 @@ NS_ASSUME_NONNULL_BEGIN
 - (UIFont *)dayLabelFont;
 
 /**
- The text color for the label of the day. Default value is [UIColor blackColor].
+ The text color for the label of the day. Default value is `+[UIColor labelColor]` on iOS >= 13, `+[UIColor blackColor]` otherwise.
  
  @discussion Can be overridden in subclasses for customization.
  */
 - (UIColor *)dayLabelTextColor;
 
 /**
- The text color for the label of the day off. Default value is [UIColor colorWithRed:184/255.0f green:184/255.0f blue:184/255.0f alpha:1.0f].
+ The text color for the label of the day off. Default value is `+[UIColor secondaryLabelColor]` on iOS >= 13, `+[UIColor colorWithRed:184/255.0f green:184/255.0f blue:184/255.0f alpha:1.0f]` otherwise.
  
  @discussion Can be overridden in subclasses for customization.
  */
 - (UIColor *)dayOffLabelTextColor;
 
 /**
- The text color for the label of the disabled day (not in range of start/end date set on calendar). Default value is [UIColor colorWithRed:184/255.0f green:184/255.0f blue:184/255.0f alpha:1.0f].
+ The text color for the label of the disabled day (not in range of start/end date set on calendar). Default value is `+[UIColor tertiaryLabelColor]` on iOS >= 13, `+[UIColor colorWithRed:184/255.0f green:184/255.0f blue:184/255.0f alpha:1.0f]` otherwise.
  
  @discussion Can be overridden in subclasses for customization.
  */
@@ -174,7 +174,7 @@ NS_ASSUME_NONNULL_BEGIN
 - (UIFont *)todayLabelFont;
 
 /**
- The text color for the label of the current day. Default value is [UIColor colorWithRed:0/255.0f green:121/255.0f blue:255/255.0f alpha:1.0f].
+ The text color for the label of the current day. Default value is `+[UIColor systemBlueColor]`.
  
  @discussion Can be overridden in subclasses for customization.
  */
@@ -195,7 +195,7 @@ NS_ASSUME_NONNULL_BEGIN
 - (UIColor *)selectedTodayLabelTextColor;
 
 /**
- The color of the background image for the cell of the current day. Default value is [UIColor colorWithRed:0/255.0f green:121/255.0f blue:255/255.0f alpha:1.0f].
+ The color of the background image for the cell of the current day. Default value is `+[UIColor systemBlueColor]`.
  
  @discussion Can be overridden in subclasses for customization. Ignored if `customSelectedTodayImage` is not equal to `nil`.
  */
@@ -223,7 +223,7 @@ NS_ASSUME_NONNULL_BEGIN
 - (UIColor *)selectedDayLabelTextColor;
 
 /**
- The color of the background image for the cell of the day when it is selected. Default value is [UIColor colorWithRed:255/255.0f green:59/255.0f blue:48/255.0f alpha:1.0f].
+ The color of the background image for the cell of the day when it is selected. Default value is `+[UIColor systemRedColor]`.
  
  @discussion Can be overridden in subclasses for customization. Ignored if `customSelectedDayImage` is not equal to `nil`.
  */
@@ -251,7 +251,7 @@ NS_ASSUME_NONNULL_BEGIN
 - (nullable UIImage *)customOverlayImage;
 
 /**
- The color of the divider image for the cell of the day. Default value is [UIColor colorWithRed:200/255.0f green:200/255.0f blue:200/255.0f alpha:1.0f].
+ The color of the divider image for the cell of the day. Default value is `+[UIColor systemFillColor]` on iOS >= 13, `+[UIColor colorWithRed:200/255.0f green:200/255.0f blue:200/255.0f alpha:1.0f]` otherwise.
  
  @discussion Can be overridden in subclasses for customization. Ignored if `customDividerImage` is not equal to `nil`.
  */

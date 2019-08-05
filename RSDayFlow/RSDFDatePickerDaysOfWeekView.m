@@ -279,7 +279,12 @@
 
 - (UIColor *)selfBackgroundColor
 {
-    return [UIColor colorWithRed:248.0/255 green:248.0/255 blue:248.0/255 alpha:1.0];
+	if (@available(iOS 13.0, *))
+	{
+		return [UIColor systemGroupedBackgroundColor];
+	} else {
+		return [UIColor colorWithRed:248.0/255 green:248.0/255 blue:248.0/255 alpha:1.0];
+	}
 }
 
 #pragma mark - Attributes of the Layout
@@ -341,12 +346,22 @@
 
 - (UIColor *)dayOfWeekLabelTextColor
 {
-    return [UIColor blackColor];
+	if (@available(iOS 13.0, *))
+	{
+		return [UIColor labelColor];
+	} else {
+		return [UIColor blackColor];
+	}
 }
 
 - (UIColor *)dayOffOfWeekLabelTextColor
 {
-    return [UIColor colorWithRed:150.0/255 green:150.0/255 blue:150.0/255 alpha:1.0];
+	if (@available(iOS 13.0, *))
+	{
+		return [UIColor secondaryLabelColor];
+	} else {
+		return [UIColor colorWithRed:150.0/255 green:150.0/255 blue:150.0/255 alpha:1.0];
+	}
 }
 
 @end

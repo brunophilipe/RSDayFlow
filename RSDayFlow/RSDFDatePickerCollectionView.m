@@ -80,7 +80,11 @@
 
 - (UIColor *)selfBackgroundColor
 {
-    return [UIColor whiteColor];
+	if (@available(iOS 13.0, *)) {
+		return [UIColor systemBackgroundColor];
+	} else {
+		return [UIColor whiteColor];
+	}
 }
 
 @end
