@@ -98,7 +98,7 @@ NS_ASSUME_NONNULL_BEGIN
  @param animated YES if you want to animate the change in position, NO if it should be immediate.
  */
 
-- (void)scrollToToday:(BOOL)animated;
+- (void)scrollToToday:(BOOL)animated NS_SWIFT_NAME(scrollToToday(animated:));
 
 /**
  Scrolls the date picker view to the given date.
