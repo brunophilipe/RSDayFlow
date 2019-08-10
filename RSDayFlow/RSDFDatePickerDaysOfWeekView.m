@@ -294,7 +294,7 @@
     NSUInteger numberOfItems = self.daysInWeek;
     CGFloat totalInteritemSpacing = [self selfInteritemSpacing] * (numberOfItems - 1);
 
-	[self layoutIfNeeded];
+    [self layoutIfNeeded];
     
     CGFloat selfItemWidth = (CGRectGetWidth(self.layoutMarginsGuide.layoutFrame) - totalInteritemSpacing) / numberOfItems;
     selfItemWidth = floor(selfItemWidth * 1000) / 1000;
