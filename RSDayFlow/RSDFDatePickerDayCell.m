@@ -114,13 +114,9 @@ CGFloat roundOnBase(CGFloat x, CGFloat base) {
 {
     self.dividerImageView.frame = [self dividerImageViewFrame];
 
-    _dividerImageView.image = [self dividerImage];
-    _markImageView.image = [self markImage];
-    _overlayImageView.image = [self overlayImage];
-    _selectedDayImageView.image = [self selectedDayImage];
-
     [super layoutSubviews];
 
+    [self updateImages];
     [self updateSubviews];
 }
 
@@ -320,6 +316,14 @@ CGFloat roundOnBase(CGFloat x, CGFloat base) {
         }
     }
 
+}
+
+- (void)updateImages
+{
+    _dividerImageView.image = [self dividerImage];
+    _markImageView.image = [self markImage];
+    _overlayImageView.image = [self overlayImage];
+    _selectedDayImageView.image = [self selectedDayImage];
 }
 
 + (NSCache *)imageCache
