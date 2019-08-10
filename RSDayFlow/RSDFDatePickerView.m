@@ -738,24 +738,7 @@ static NSString * const RSDFDatePickerViewDayCellIdentifier = @"RSDFDatePickerVi
         cell.accessibilityLabel = [NSDateFormatter localizedStringFromDate:cellDate dateStyle:NSDateFormatterLongStyle timeStyle:NSDateFormatterNoStyle];
     }
 
-    NSUInteger numberOfItemsPerRow = [[self collectionViewLayout] numberOfItemsPerRow];
-    [cell setInsetsLayoutMarginsFromSafeArea:NO];
-
-    if (indexPath.item % numberOfItemsPerRow == 0) { // First in row, set left margin
-        UIEdgeInsets cellInsets = UIEdgeInsetsZero;
-        cellInsets.left = [[self collectionView] layoutMargins].left;
-        [cell setLayoutMargins:cellInsets];
-    }
-    else if (indexPath.item % numberOfItemsPerRow == numberOfItemsPerRow - 1) { // Last in row, set right margin
-        UIEdgeInsets cellInsets = UIEdgeInsetsZero;
-        cellInsets.right = [[self collectionView] layoutMargins].right;
-        [cell setLayoutMargins:cellInsets];
-    }
-    else {
-        [cell setLayoutMargins:UIEdgeInsetsZero];
-    }
-    
-    [cell setNeedsDisplay];
+    [cell setNeedsLayout];
     
     return cell;
 }

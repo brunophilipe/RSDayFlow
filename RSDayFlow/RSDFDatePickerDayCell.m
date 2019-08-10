@@ -82,22 +82,57 @@ CGFloat roundOnBase(CGFloat x, CGFloat base) {
     [self addSubview:self.dateLabel];
     
     [self updateSubviews];
+    [self setNeedsUpdateConstraints];
+}
+
+- (void)updateConstraints
+{
+    if ([_selectedDayImageView translatesAutoresizingMaskIntoConstraints]) {
+        [_selectedDayImageView setTranslatesAutoresizingMaskIntoConstraints:NO];
+        [self installDateViewConstraintsOntoView:_selectedDayImageView];
+    }
+
+    if ([_overlayImageView translatesAutoresizingMaskIntoConstraints]) {
+        [_overlayImageView setTranslatesAutoresizingMaskIntoConstraints:NO];
+        [self installDateViewConstraintsOntoView:_overlayImageView];
+    }
+
+    if ([_markImageView translatesAutoresizingMaskIntoConstraints]) {
+        [_markImageView setTranslatesAutoresizingMaskIntoConstraints:NO];
+        [self installMarkImageConstraintsOntoView:_markImageView];
+    }
+
+    if ([_dateLabel translatesAutoresizingMaskIntoConstraints]) {
+        [_dateLabel setTranslatesAutoresizingMaskIntoConstraints:NO];
+        [self installDateViewConstraintsOntoView:_dateLabel];
+    }
+
+    [super updateConstraints];
 }
 
 - (void)layoutSubviews
 {
-    [super layoutSubviews];
-    
-    self.dateLabel.frame = [self selectedImageViewFrame];
-    self.selectedDayImageView.frame = [self selectedImageViewFrame];
-    self.overlayImageView.frame = [self selectedImageViewFrame];
-    self.markImageView.frame = [self markImageViewFrame];
     self.dividerImageView.frame = [self dividerImageViewFrame];
-    self.dividerImageView.image = [self dividerImage];
+
+    _dividerImageView.image = [self dividerImage];
+    _markImageView.image = [self markImage];
+    _overlayImageView.image = [self overlayImage];
+    _selectedDayImageView.image = [self selectedDayImage];
+
+    [super layoutSubviews];
+
+    [self updateSubviews];
 }
 
-- (void)drawRect:(CGRect)rect
+- (void)setSelected:(BOOL)selected
 {
+    [super setSelected:selected];
+    [self updateSubviews];
+}
+
+- (void)setHighlighted:(BOOL)highlighted
+{
+    [super setHighlighted:highlighted];
     [self updateSubviews];
 }
 
@@ -106,7 +141,7 @@ CGFloat roundOnBase(CGFloat x, CGFloat base) {
 - (UILabel *)dateLabel
 {
     if (!_dateLabel) {
-        _dateLabel = [[UILabel alloc] initWithFrame:[self selectedImageViewFrame]];
+        _dateLabel = [[UILabel alloc] initWithFrame:CGRectZero];
         _dateLabel.backgroundColor = [UIColor clearColor];
         _dateLabel.textAlignment = NSTextAlignmentCenter;
     }
@@ -118,7 +153,6 @@ CGFloat roundOnBase(CGFloat x, CGFloat base) {
     if (!_dividerImageView) {
         _dividerImageView = [[UIImageView alloc] initWithFrame:[self dividerImageViewFrame]];
         _dividerImageView.contentMode = UIViewContentModeCenter;
-        _dividerImageView.image = [self dividerImage];
     }
     return _dividerImageView;
 }
@@ -128,16 +162,28 @@ CGFloat roundOnBase(CGFloat x, CGFloat base) {
     return CGRectMake(0.0f, 0.0f, CGRectGetWidth(self.frame) + 3.0f, roundOnBase(0.5f, [UIScreen mainScreen].scale));
 }
 
-- (CGRect)markImageViewFrame
+- (void)installMarkImageConstraintsOntoView:(UIView *)view
 {
-    return CGRectMake(roundOnBase(CGRectGetWidth(self.frame) / 2 - 4.5f, [UIScreen mainScreen].scale), roundOnBase(45.5f, [UIScreen mainScreen].scale), 9.0f, 9.0f);
+    UIView *superview = [view superview];
+    CGFloat scale = [UIScreen mainScreen].scale;
+
+    assert(superview);
+
+    [NSLayoutConstraint activateConstraints:@[
+        [[[superview layoutMarginsGuide] centerXAnchor] constraintEqualToAnchor:[view centerXAnchor]],
+        [[view topAnchor] constraintEqualToAnchor:[superview topAnchor] constant:roundOnBase(45.5f, scale)],
+        [[view widthAnchor] constraintEqualToConstant:9.0f],
+        [[view heightAnchor] constraintEqualToConstant:9.0f],
+    ]];
 }
 
 - (UIImage *)markImage
 {
     if (!_markImage) {
         NSString *markImageKey = [NSString stringWithFormat:@"img_mark_%@", [self.markImageColor description]];
-        _markImage = [self ellipseImageWithKey:markImageKey frame:self.markImageView.frame color:self.markImageColor];
+        _markImage = [self ellipseImageWithKey:markImageKey
+                                         frame:self.markImageView.frame
+                                         color:self.markImageColor];
     }
     return _markImage;
 }
@@ -153,10 +199,9 @@ CGFloat roundOnBase(CGFloat x, CGFloat base) {
 - (UIImageView *)markImageView
 {
     if (!_markImageView) {
-        _markImageView = [[UIImageView alloc] initWithFrame:[self markImageViewFrame]];
+        _markImageView = [[UIImageView alloc] initWithFrame:CGRectZero];
         _markImageView.backgroundColor = [UIColor clearColor];
         _markImageView.contentMode = UIViewContentModeCenter;
-        _markImageView.image = self.markImage;
     }
     return _markImageView;
 }
@@ -164,12 +209,11 @@ CGFloat roundOnBase(CGFloat x, CGFloat base) {
 - (UIImageView *)overlayImageView
 {
     if (!_overlayImageView) {
-        _overlayImageView = [[UIImageView alloc] initWithFrame:[self selectedImageViewFrame]];
+        _overlayImageView = [[UIImageView alloc] initWithFrame:CGRectZero];
         _overlayImageView.backgroundColor = [UIColor clearColor];
         _overlayImageView.opaque = NO;
         _overlayImageView.alpha = 0.5f;
         _overlayImageView.contentMode = UIViewContentModeCenter;
-        _overlayImageView.image = [self overlayImage];
     }
     return _overlayImageView;
 }
@@ -177,17 +221,26 @@ CGFloat roundOnBase(CGFloat x, CGFloat base) {
 - (UIImageView *)selectedDayImageView
 {
     if (!_selectedDayImageView) {
-        _selectedDayImageView = [[UIImageView alloc] initWithFrame:[self selectedImageViewFrame]];
+        _selectedDayImageView = [[UIImageView alloc] initWithFrame:CGRectZero];
         _selectedDayImageView.backgroundColor = [UIColor clearColor];
         _selectedDayImageView.contentMode = UIViewContentModeCenter;
-        _selectedDayImageView.image = [self selectedDayImage];
     }
     return _selectedDayImageView;
 }
 
-- (CGRect)selectedImageViewFrame
+- (void)installDateViewConstraintsOntoView:(UIView *)view
 {
-    return CGRectMake(roundOnBase(CGRectGetWidth(self.frame) / 2 - 17.5f, [UIScreen mainScreen].scale), roundOnBase(5.5, [UIScreen mainScreen].scale), 35.0f, 35.0f);
+    UIView *superview = [view superview];
+    CGFloat scale = [UIScreen mainScreen].scale;
+
+    assert(superview);
+
+    [NSLayoutConstraint activateConstraints:@[
+        [[[superview layoutMarginsGuide] centerXAnchor] constraintEqualToAnchor:[view centerXAnchor]],
+        [[view topAnchor] constraintEqualToAnchor:[superview topAnchor] constant:roundOnBase(5.5, scale)],
+        [[view widthAnchor] constraintEqualToConstant:35.0f],
+        [[view heightAnchor] constraintEqualToConstant:35.0f],
+    ]];
 }
 
 - (void)setMarkImage:(UIImage *)markImage
@@ -195,7 +248,7 @@ CGFloat roundOnBase(CGFloat x, CGFloat base) {
     if (![_markImage isEqual:markImage]) {
         _markImage = markImage;
         
-        [self setNeedsDisplay];
+        [self updateSubviews];
     }
 }
 
@@ -205,7 +258,7 @@ CGFloat roundOnBase(CGFloat x, CGFloat base) {
         _markImageColor = markImageColor;
         _markImage = nil;
         
-        [self setNeedsDisplay];
+        [self updateSubviews];
     }
 }
 
@@ -284,13 +337,19 @@ CGFloat roundOnBase(CGFloat x, CGFloat base) {
     id answer = [[self imageCache] objectForKey:key];
     if (!answer) {
         answer = block();
-        [[self imageCache] setObject:answer forKey:key];
+        if (answer) {
+            [[self imageCache] setObject:answer forKey:key];
+        }
     }
     return answer;
 }
 
 - (UIImage *)ellipseImageWithKey:(NSString *)key frame:(CGRect)frame color:(UIColor *)color
 {
+    if ([self window] == nil || frame.size.width == 0 || frame.size.height == 0) {
+        return nil;
+    }
+
     UIImage *ellipseImage = [[self class] fetchObjectForKey:key withCreator:^id{
         UIGraphicsBeginImageContextWithOptions(frame.size, NO, self.window.screen.scale);
         CGContextRef context = UIGraphicsGetCurrentContext();
@@ -311,6 +370,10 @@ CGFloat roundOnBase(CGFloat x, CGFloat base) {
 
 - (UIImage *)rectImageWithKey:(NSString *)key frame:(CGRect)frame color:(UIColor *)color
 {
+    if ([self window] == nil || frame.size.width == 0 || frame.size.height == 0) {
+        return nil;
+    }
+
     UIImage *rectImage = [[self class] fetchObjectForKey:key withCreator:^id{
         UIGraphicsBeginImageContextWithOptions(frame.size, NO, self.window.screen.scale);
         CGContextRef context = UIGraphicsGetCurrentContext();
@@ -423,7 +486,9 @@ CGFloat roundOnBase(CGFloat x, CGFloat base) {
     if (!selectedTodayImage) {
         UIColor *selectedTodayImageColor = [self selectedTodayImageColor];
         NSString *selectedTodayImageKey = [NSString stringWithFormat:@"img_selected_today_%@", [selectedTodayImageColor description]];
-        selectedTodayImage = [self ellipseImageWithKey:selectedTodayImageKey frame:self.selectedDayImageView.frame color:selectedTodayImageColor];
+        selectedTodayImage = [self ellipseImageWithKey:selectedTodayImageKey
+                                                 frame:self.selectedDayImageView.frame
+                                                 color:selectedTodayImageColor];
     }
     return selectedTodayImage;
 }
@@ -454,7 +519,9 @@ CGFloat roundOnBase(CGFloat x, CGFloat base) {
     if (!selectedDayImage) {
         UIColor *selectedDayImageColor = [self selectedDayImageColor];
         NSString *selectedDayImageKey = [NSString stringWithFormat:@"img_selected_day_%@", [selectedDayImageColor description]];
-        selectedDayImage = [self ellipseImageWithKey:selectedDayImageKey frame:self.selectedDayImageView.frame color:selectedDayImageColor];
+        selectedDayImage = [self ellipseImageWithKey:selectedDayImageKey
+                                               frame:self.selectedDayImageView.frame
+                                               color:selectedDayImageColor];
     }
     return selectedDayImage;
 }
@@ -500,7 +567,9 @@ CGFloat roundOnBase(CGFloat x, CGFloat base) {
     if (!dividerImage) {
         UIColor *dividerImageColor = [self dividerImageColor];
         NSString *dividerImageKey = [NSString stringWithFormat:@"img_divider_%@_%g", [dividerImageColor description], CGRectGetWidth(self.dividerImageView.frame)];
-        dividerImage = [self rectImageWithKey:dividerImageKey frame:self.dividerImageView.frame color:dividerImageColor];
+        dividerImage = [self rectImageWithKey:dividerImageKey
+                                        frame:self.dividerImageView.frame
+                                        color:dividerImageColor];
     }
     return dividerImage;
 }
