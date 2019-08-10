@@ -132,14 +132,14 @@
     
     NSLocaleLanguageDirection characterDirection = [NSLocale characterDirectionForLanguage:self.calendar.locale.localeIdentifier];
     if (characterDirection == NSLocaleLanguageDirectionRightToLeft) {
-        x = CGRectGetWidth(self.frame) - itemSize.width;
+        x = CGRectGetWidth(self.layoutMarginsGuide.layoutFrame) - itemSize.width;
         [self.weekdayLabels enumerateObjectsUsingBlock:^(UILabel *weekdayLabel, NSUInteger idx, BOOL *stop) {
             CGRect weekdayLabelFrame = CGRectMake(x, y, itemSize.width, itemSize.height);
             weekdayLabel.frame = weekdayLabelFrame;
             x -= (itemSize.width + interitemSpacing);
         }];
     } else {
-        x = 0;
+        x = [self layoutMargins].left;
         [self.weekdayLabels enumerateObjectsUsingBlock:^(UILabel *weekdayLabel, NSUInteger idx, BOOL *stop) {
             CGRect weekdayLabelFrame = CGRectMake(x, y, itemSize.width, itemSize.height);
             weekdayLabel.frame = weekdayLabelFrame;
@@ -294,7 +294,7 @@
     NSUInteger numberOfItems = self.daysInWeek;
     CGFloat totalInteritemSpacing = [self selfInteritemSpacing] * (numberOfItems - 1);
     
-    CGFloat selfItemWidth = (CGRectGetWidth(self.frame) - totalInteritemSpacing) / numberOfItems;
+    CGFloat selfItemWidth = (CGRectGetWidth(self.layoutMarginsGuide.layoutFrame) - totalInteritemSpacing) / numberOfItems;
     selfItemWidth = floor(selfItemWidth * 1000) / 1000;
     CGFloat selfItemHeight = CGRectGetHeight(self.frame);
     
