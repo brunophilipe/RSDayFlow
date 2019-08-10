@@ -114,7 +114,8 @@ static NSString * const RSDFDatePickerViewDayCellIdentifier = @"RSDFDatePickerVi
 
 - (void)layoutSubviews
 {
-    CGPoint beforeLayoutSubviewsContentOffset = self.collectionView.contentOffset;
+    CGPoint beforeLayoutSubviewsContentOffset = self.collectionView.superview != nil ? self.collectionView.contentOffset
+                                                                                     : CGPointZero;
     
     [super layoutSubviews];
 
@@ -153,7 +154,6 @@ static NSString * const RSDFDatePickerViewDayCellIdentifier = @"RSDFDatePickerVi
         [_collectionView registerClass:[self monthHeaderClass] forSupplementaryViewOfKind:UICollectionElementKindSectionHeader withReuseIdentifier:RSDFDatePickerViewMonthHeaderIdentifier];
         [_collectionView registerClass:[self dayCellClass] forCellWithReuseIdentifier:RSDFDatePickerViewDayCellIdentifier];
         [_collectionView reloadData];
-        [_collectionView layoutIfNeeded];
         [self scrollToToday:NO];
     }
     return _collectionView;
