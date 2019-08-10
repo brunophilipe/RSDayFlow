@@ -67,25 +67,26 @@
 
 - (void)commonInitializer
 {
+    _numberOfItemsPerRow = 7;
     self.minimumLineSpacing = [self selfMinimumLineSpacing];
     self.minimumInteritemSpacing = [self selfMinimumInteritemSpacing];
 }
 
-#pragma mark - Atrributes of the Layout
+#pragma mark - Attributes of the Layout
 
 - (NSArray *)layoutAttributesForElementsInRect:(CGRect)rect
 {
-    NSArray *supersAttributes = [super layoutAttributesForElementsInRect:rect];
+    NSArray *superAttributes = [super layoutAttributesForElementsInRect:rect];
     
     if (self.direction == RSDFDatePickerCollectionViewLayoutDirectionRightToLeft) {
-        for (UICollectionViewLayoutAttributes *attributes in supersAttributes) {
+        for (UICollectionViewLayoutAttributes *attributes in superAttributes) {
             CGRect frame = attributes.frame;
             frame.origin.x = CGRectGetWidth(rect) - CGRectGetWidth(attributes.frame) - CGRectGetMinX(attributes.frame);
             attributes.frame = frame;
         }
     }
     
-    return supersAttributes;
+    return superAttributes;
 }
 
 - (CGSize)selfHeaderReferenceSize
@@ -96,16 +97,26 @@
     return (CGSize){ selfHeaderReferenceWidth, selfHeaderReferenceHeight };
 }
 
-- (CGSize)selfItemSize
+- (CGSize)itemSizeForIndexPath:(NSIndexPath *)indexPath
 {
-    NSUInteger numberOfItemsInTheSameRow = 7;
-    CGFloat totalInteritemSpacing = [self minimumInteritemSpacing] * (numberOfItemsInTheSameRow - 1);
-    
-    CGFloat selfItemWidth = (CGRectGetWidth(self.collectionView.frame) - totalInteritemSpacing) / numberOfItemsInTheSameRow;
+    NSUInteger numberOfItemsPerRow = [self numberOfItemsPerRow];
+    CGFloat totalInteritemSpacing = [self minimumInteritemSpacing] * (CGFloat)(numberOfItemsPerRow - 1);
+
+    UIEdgeInsets layoutMargins = [[self collectionView] layoutMargins];
+    CGFloat usefulWidth = UIEdgeInsetsInsetRect([[self collectionView] frame], layoutMargins).size.width;
+
+    CGFloat selfItemWidth = (usefulWidth - totalInteritemSpacing) / (CGFloat)numberOfItemsPerRow;
     selfItemWidth = floor(selfItemWidth * 1000) / 1000;
     CGFloat selfItemHeight = 70.0f;
+
+    if (indexPath.item % numberOfItemsPerRow == 0) { // First in row, inset from left
+        selfItemWidth += layoutMargins.left;
+    }
+    else if (indexPath.item % numberOfItemsPerRow == numberOfItemsPerRow - 1) { // Last in row, inset from right
+        selfItemWidth += layoutMargins.right;
+    }
     
-    return (CGSize){ selfItemWidth, selfItemHeight };
+    return CGSizeMake(selfItemWidth, selfItemHeight);
 }
 
 - (CGFloat)selfMinimumLineSpacing

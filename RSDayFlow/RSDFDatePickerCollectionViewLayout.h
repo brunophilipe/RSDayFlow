@@ -41,6 +41,11 @@ typedef NS_ENUM(NSUInteger, RSDFDatePickerCollectionViewLayoutDirection) {
 @interface RSDFDatePickerCollectionViewLayout : UICollectionViewFlowLayout
 
 /**
+ The number of items the layout manager should lay out per row. The default is `7`. If a different calendar is used it might be necessary to change this value.
+ */
+@property (nonatomic) NSUInteger numberOfItemsPerRow;
+
+/**
  Designated initializer. Initializes and returns a newly allocated layout object with the specified direction.
  
  @param direction The direction of the layout.
@@ -59,11 +64,11 @@ typedef NS_ENUM(NSUInteger, RSDFDatePickerCollectionViewLayoutDirection) {
 - (CGSize)selfHeaderReferenceSize;
 
 /**
- The default size to use for cells. Default height is `70.0f`. Default width is calculated based on the width of the collection view.
+ Computes size to use for cells. Default height is `70.0f`. Default width is calculated based on the width of the collection view and its layout margins.
  
  @discussion Can be overridden in subclasses for customization.
  */
-- (CGSize)selfItemSize;
+- (CGSize)itemSizeForIndexPath:(NSIndexPath *)indexPath;
 
 /**
  The minimum spacing to use between lines of items in the grid. Default value is `2.0f`.
